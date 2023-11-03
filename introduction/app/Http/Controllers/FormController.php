@@ -15,18 +15,16 @@ class FormController extends Controller
 
     public function submitForm(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
             'message' => 'required|string',
+        ], [
+            'name.required' => 'Name is required, man',
+            'email.required' => 'Please, write your email',
+            'email.email' => 'Email is expected',
+            'message.required' => 'Write anything',
         ]);
-
-        if ($validator->fails()) {
-            return redirect('/form')
-                ->withErrors($validator)
-                ->withInput();
-        }
-
         $data = [
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -37,7 +35,7 @@ class FormController extends Controller
 
         Storage::disk('local')->put($filename, json_encode($data));
 
-        return redirect('/form')->with('success', 'Данные успешно сохранены.');
+        return back()->with('success', 'Данные успешно сохранены.');
     }
 
     public function displayDataTable()
