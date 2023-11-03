@@ -15,6 +15,8 @@ class FormController extends Controller
 
     public function submitForm(Request $request)
     {
+        // Валидация форм в HTML (type='email', required) отключена специально, чтобы проверить нормально
+        // валидацию тут
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
