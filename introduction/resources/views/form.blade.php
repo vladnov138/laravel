@@ -8,7 +8,7 @@
         {{ session('success') }}
     </div>
     @endif
-    <form method="POST" action="/submit-form">
+    <form method="POST" action="/submit_form">
         @csrf
         <div class="form-group">
             <label for="name">Имя:</label>

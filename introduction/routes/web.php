@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DisplayDataController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FormController;
 
@@ -20,6 +21,6 @@ Route::get('/', function () {
 
 Route::get('/', [FormController::class, 'showForm']);
 
-Route::post('/submit-form', [FormController::class, 'submitForm']);
+Route::post('/submit_form', [FormController::class, 'submitForm']);
 
-Route::get('/data-table', [FormController::class, 'displayDataTable']);
+Route::get('/data_table', [DisplayDataController::class, 'displayDataTable']);

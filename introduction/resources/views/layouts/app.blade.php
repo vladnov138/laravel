@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,7 +37,7 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="{{ url('/data-table') }}">Загруженные данные</a></li>
+                    <li><a href="{{ url('/data_table') }}">Загруженные данные</a></li>
                     <li><a href="#">О нас</a></li>
                     <li><a href="#">Контакты</a></li>
                 </ul>
