@@ -43,7 +43,7 @@ return [
     */
 
     // 'debug' => (bool) env('APP_DEBUG', false),
-    'debug' => "base64:PJxTIKcc0vjG88/VjuoE2LrzTje16hzIYEFnFeE0rjk="
+    'debug' => "base64:PJxTIKcc0vjG88/VjuoE2LrzTje16hzIYEFnFeE0rjk=",
     // Ключ не стоит светить, но ради задания он тут. А так для него есть место в .env
     // А .env не заливается никогда в открытые репозитории.
     // Для деплоя использовать заготовку из .env.example
