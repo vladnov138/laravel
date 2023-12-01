@@ -12,9 +12,6 @@
 
         <label for="email">Email:</label>
         <input type="email" name="email" id="email" value="{{ $user->email }}" required>
-
-        <!-- Добавьте поля для других данных пользователя, если необходимо -->
-
         <button type="submit">Сохранить</button>
     </form>
     

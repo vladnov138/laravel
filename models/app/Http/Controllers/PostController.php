@@ -4,44 +4,54 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\User;
+use App\Models\Tag;
+use App\Http\Resources\PostResource;
 
 class PostController extends Controller
 {
-    public function showPosts(){
-        $posts = Post::all();
-        return view('posts.posts', compact('posts'));
+    public function showPosts($user_id){
+        $posts = Post::where('user_id', $user_id)->get();
+        $user = User::findOrFail($user_id);
+        return view('posts.posts', compact('posts', 'user'));
     }
 
     public function create(){
-        return view('posts.create');
+        $tags = Tag::all();
+        return view('posts.create', compact('tags'));
     }
 
-    public function addPost(Request $request){
+    public function addPost($user_id, Request $request){
         $validatedData = $request->validate([
-            'name' => 'required'
-        ]);
-
-        $post = new Post([
-            'name' => $request->input('name')
+            'title' => 'required',
+            'content' => 'required',
+            'tags' => 'array|exists:tags,id'
         ]);
 
         $post = new Post();
-        $post->name = $validatedData['name'];
+        $post->user_id = $user_id;
+        $post->title = $validatedData['title'];
+        $post->content = $validatedData['content'];
         $post->save();
+        $post->tag()->attach($validatedData['tags']);
 
-        return redirect('/posts')->with('success', 'Post успешно добавлен');
+        return redirect('/users/'.$user_id.'/posts')->with('success', 'Post успешно добавлен');
     }
 
-    public function showPost($id)
+    public function showPost($user_id, $post_id)
     {
-        $post = Post::findOrFail($id);
-        return view('posts.show', compact('post'));
+        $post = Post::findOrFail($post_id);
+        $user = User::findOrFail($user_id);
+        return view('posts.show', compact('post', 'user'));
     }
 
-    public function edit($id)
+    public function edit($user_id, $post_id)
     {
-        $post = Post::findOrFail($id);
-        return view('posts.edit', compact('post'));
+        $post = Post::findOrFail($post_id);
+        $tags = Tag::all();
+        $selectedTags = Tag::searchByPost($post_id)->get();
+        $user = User::findOrFail($user_id);
+        return view('posts.edit', compact('user', 'post', 'tags', 'selectedTags'));
     }
 
     public function update(Request $request, $id)
@@ -63,5 +73,10 @@ class PostController extends Controller
         $post->delete();
 
         return redirect('/posts')->with('success', 'Post успешно удалён');
+    }
+
+    public function showResources() {
+        $posts = Post::withTrashed()->get();
+        return PostResource::collection($posts);
     }
 }

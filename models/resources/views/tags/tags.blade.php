@@ -6,10 +6,13 @@
     <table>
         <tr>
             <th>Название</th>
+            <th>Описание</th>
+            <th>Действие</th>
         </tr>
         @foreach ($tags as $tag)
             <tr>
                 <td>{{ $tag->name }}</td>
+                <td>{{ $tag->description }}</td>
                 <td>
                     <a href="{{ url('/tags/'.$tag->id.'/edit') }}">Редактировать</a>
                     <form action="{{ url('/tags', $tag->id) }}" method="POST">

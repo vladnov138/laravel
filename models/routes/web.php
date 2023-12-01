@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\PostController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,18 +32,13 @@ Route::put('/tags/{id}', [TagController::class, 'update']);
 Route::delete('/tags/{id}', [TagController::class, 'delete']);
 Route::get('/tags/{id}', [TagController::class, 'showTag']);
 
-// Route::get('/roles', [RoleController::class, 'showTags']);
-// Route::get('/roles/create', [RoleController::class, 'create']);
-// Route::post('/roles/create', [RoleController::class, 'addTag']);
-// Route::update('/roles/{id}', [RoleController::class, 'update']);
-// Route::delete('/roles/{id}', [RoleController::class, 'delete']);
-// Route::get('/roles/{id}', [RoleController::class, 'showTag']);
+Route::get('/users/{user_id}/posts', [PostController::class, 'showPosts']);
+Route::get('/users/{user_id}/posts/create', [PostController::class, 'create']);
+Route::post('/users/{user_id}/posts/create', [PostController::class, 'addPost']);
+Route::put('/users/{user_id}/posts/{post_id}', [PostController::class, 'update']);
+Route::get('/users/{user_id}/posts/{post_id}/edit', [PostController::class, 'edit']);
+Route::delete('/users/{user_id}/posts/{post_id}', [PostController::class, 'delete']);
+Route::get('/users/{user_id}/posts/{post_id}', [PostController::class, 'showPost']);
 
-// Route::get('/posts', [PostController::class, 'showTags']);
-// Route::get('/posts/create', [PostController::class, 'create']);
-// Route::post('/posts/create', [PostController::class, 'addTag']);
-// Route::update('/posts/{id}', [PostController::class, 'update']);
-// Route::delete('/posts/{id}', [PostController::class, 'delete']);
-// Route::get('/posts/{id}', [PostController::class, 'showTag']);
-
-// Route::get('/admin', [Controllers\AdminController::class, 'index']);
+Route::get('/json/users', [UserController::class, 'showResources']);
+Route::get('/json/posts', [PostController::class, 'showResources']);

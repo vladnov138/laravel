@@ -3,6 +3,8 @@
 @section('content')
     <h1>Пользователь: {{ $user->name }}</h1>
     <p>Email: {{ $user->email }}</p>
+    <a href="{{ url('/users/'.$user->id.'/posts') }}">Посты пользователя</a>
+    <a href="{{ url('/users/'.$user->id.'/posts/create') }}">Создать пост</a>
     <a href="{{ url('/users/'.$user->id.'/edit') }}">Редактировать</a>
     <form action="{{ url('/users/delete', $user->id) }}" method="POST">
         @csrf

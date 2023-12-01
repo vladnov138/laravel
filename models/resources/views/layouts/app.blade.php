@@ -37,9 +37,9 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="{{ url('/data_table') }}">Загруженные данные</a></li>
-                    <li><a href="#">О нас</a></li>
-                    <li><a href="#">Контакты</a></li>
+                    <li><a href="{{ url('/users') }}">Пользователи</a></li>
+                    <li><a href="{{ url('/tags') }}">Теги</a></li>
+                    <li><a href="#"></a></li>
                 </ul>
             </nav>
         </div>

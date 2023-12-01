@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use App\Models\Role;
-use App\Models\Post;
-use App\Models\Tag;
+use App\Http\Resources\UserResource;
 
 use Illuminate\Http\Request;
 
@@ -26,12 +23,6 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email',
             'password' => 'required'
-        ]);
-
-        $user = new User([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => $request->input('password')
         ]);
 
         $user = new User();
@@ -81,5 +72,10 @@ class UserController extends Controller
         $user->delete();
 
         return redirect('/users')->with('success', 'Пользователь успешно удалён');
+    }
+
+    public function showResources() {
+        $users = User::withTrashed()->get();
+        return UserResource::collection($users);
     }
 }
