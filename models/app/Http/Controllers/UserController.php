@@ -18,16 +18,14 @@ class UserController extends Controller
     }
 
     public function create(){
-        $roles = Role::all();
-        return view('users.create', compact('roles'));
+        return view('users.create');
     }
 
-    public function store(Request $request){
+    public function addUser(Request $request){
         $validatedData = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
-            'password' => 'required',
-            // 'role' => 'required'
+            'password' => 'required'
         ]);
 
         $user = new User([
@@ -40,109 +38,48 @@ class UserController extends Controller
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
         $user->password = bcrypt($validatedData['password']);
-        $user->save();
-
-        return redirect('users');
-    }
-
-    public function show($id){
-        $user = User::withRoles($id);
-        $comments = Comment::where('commentable_type', 'App\Models\User')
-        ->where('commentable_id', $id)
-        ->get();
-        return view('users.user', compact('user', 'comments'));
-    }
-
-    public function edit($id){
-        $user = User::withRoles($id);
-        $roles = Role::all();
-        return view('users.edit', compact('user', 'roles'));
-    }
-
-    public function update_user($id, Request $request){
-        $user = User::withRoles($id);
-        $request->validate([
-            'name' => 'required|min:2',
-            'lastname' => 'required',
-            'age' => 'required|numeric|min:12|max:99',
-            'city' => 'required',
-            'email' => 'required|email'
-        ], [
-            'name.required' => 'Необходимо ввести имя!',
-            'name.min' => 'В имени должно быть минимум :min символа.',
-            'lastname.required' => 'Необходимо ввести фамилию!',
-            'age.required' => 'Необходимо ввести возраст!',
-            'age.min' => 'Не обслуживаем клиентов младше :min лет.',
-            'age.max' => 'Не обслуживаем клиентов старше :max лет.',
-            'age.numeric' => 'Возраст должен быть числом!', 
-            'email.required' => 'Необходимо ввести email!',
-            'email.email' => 'Это не похоже на email.'
-        ]);
-        DB::transaction(function () use ($user, $request) {
-            $user->update([
-                'name' => $request->input('name'),
-                'lastname' => $request->input('lastname'),
-                'age' => $request->input('age'),
-                'city' => $request->input('city'),
-                'email' => $request->input('email'),
-            ]);
-
-            $roles = $request->input('roles');
-            $user->roles()->sync($roles); // Обновляем роли пользователя
-        });
-
-        return redirect('/users/'.$id);
-    }
-
-    public function delete($id){
-        $user = User::find($id);
-        $user->posts()->delete();
-        $user->delete();
-        return redirect('users');
-    }
-}
-
-/**public function addUser(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-        ]);
-
-        $user = new User();
-        $user->name = $validatedData['name'];
-        $user->email = $validatedData['email'];
-        $user->password = bcrypt($validatedData['password']);
+        $user->role_id = 1;
         $user->save();
 
         return redirect('/users')->with('success', 'Пользователь успешно добавлен');
     }
 
+    public function showUser($id)
+    {
+        $user = User::findOrFail($id);
+        return view('users.show', compact('user'));
+    }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        return view('users.edit', compact('user'));
+    }
+
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'password' => 'required|min:6',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id, // Исключаем текущего пользователя из проверки на уникальность
+            'password' => 'sometimes|required'
         ]);
 
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->name = $validatedData['name'];
         $user->email = $validatedData['email'];
-        $user->password = bcrypt($validatedData['password']);
+        if (!empty($validatedData['password'])) {
+            $user->password = bcrypt($validatedData['password']);
+        }
         $user->save();
 
-        return redirect('/users')->with('success', 'Пользователь успешно обновлен');
+        return redirect('/users')->with('success', 'Пользователь успешно обновлён');
     }
 
     public function delete($id)
     {
-        $user = User::find($id);
-        if ($user) {
-            $user->delete();
-            return redirect('/users')->with('success', 'Пользователь успешно удален');
-        } else {
-            return redirect('/users')->with('error', 'Пользователь не найден');
-        }
-    } */
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect('/users')->with('success', 'Пользователь успешно удалён');
+    }
+}
