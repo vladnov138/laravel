@@ -15,4 +15,9 @@ class Role extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function scopeSearchByTag($query, $tag)
+    {
+        return $query->where('tag_id', $tag->id);
+    }
 }

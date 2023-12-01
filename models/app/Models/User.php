@@ -21,8 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
-        'role'
+        'password'
     ];
 
     /**
@@ -40,5 +39,15 @@ class User extends Authenticatable
 
     public function posts() {
         return $this->hasMany(Post::class);
+    }
+
+    public function scopeByRole($query, $role)
+    {
+        return $query->where('role_id', $role->id);
+    }
+
+    public function scopeSearchByName($query, $name)
+    {
+        return $query->where('name', 'like', '%' . $name . '%');
     }
 }
