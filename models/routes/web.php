@@ -16,6 +16,7 @@ use App\Http\Controllers\PostController;
 |
 */
 
+Route::get('/', [UserController::class, 'showUsers']);
 Route::get('/users', [UserController::class, 'showUsers']);
 Route::get('/users/create', [UserController::class, 'create']);
 Route::post('/users/create', [UserController::class, 'addUser']);

@@ -39,7 +39,8 @@
                 <ul>
                     <li><a href="{{ url('/users') }}">Пользователи</a></li>
                     <li><a href="{{ url('/tags') }}">Теги</a></li>
-                    <li><a href="#"></a></li>
+                    <li><a href="{{ url('/json/users') }}">JSON Users</a></li>
+                    <li><a href="{{ url('/json/posts') }}">JSON Posts</a></li>
                 </ul>
             </nav>
         </div>
